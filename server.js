@@ -5,7 +5,8 @@ const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const sequelize = require('./config/database');
-const { Usuario, Turno } = require('./models');
+require('./models');
+
 const usuarioRoutes = require('./routes/usuarioRoutes');
 const turnoRoutes = require('./routes/turnoRoutes');
 
@@ -13,10 +14,6 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
-app.use('/api/usuarios', usuarioRoutes);
-app.use('/api/turnos', turnoRoutes);
-
-app.get('/prueba', (req, res) => res.send('La ruta de prueba funciona'));
 
 app.use(rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -24,6 +21,9 @@ app.use(rateLimit({
   standardHeaders: 'draft-8',
   legacyHeaders: false,
 }));
+
+app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/turnos', turnoRoutes);
 
 app.get('/', (req, res) => {
   res.json({
@@ -42,7 +42,7 @@ async function iniciarServidor() {
     console.log('Modelos sincronizados con la base de datos');
 
     app.listen(PORT, () => {
-      console.log(`Servidor escuchando en http://localhost:${PORT}`);
+      console.log(`Servidor escuchando en el puerto ${PORT}`);
     });
   } catch (error) {
     console.error('Error al iniciar el servidor:', error.message);
@@ -51,3 +51,5 @@ async function iniciarServidor() {
 }
 
 iniciarServidor();
+
+
