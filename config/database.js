@@ -17,10 +17,7 @@ const opciones = {
 if (esProduccion) {
   opciones.dialectOptions = {
     ssl: {
-      ca: fs.readFileSync(
-        path.join(__dirname, '..', 'certificados', 'ca.pem'),
-        'utf8'
-      ),
+      ca: process.env.DB_CA_CERT,
       rejectUnauthorized: true
     }
   };
