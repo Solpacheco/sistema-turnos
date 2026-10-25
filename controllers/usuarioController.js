@@ -41,6 +41,14 @@ const crearUsuario = async (req, res) => {
       });
     }
 
+    const formatoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if (!formatoEmail.test(email)) {
+  return res.status(400).json({
+    mensaje: 'El formato del email no es válido'
+  });
+}
+
     const existente = await Usuario.findOne({ where: { email } });
 
     if (existente) {
