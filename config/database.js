@@ -13,11 +13,9 @@ const opciones = {
   dialect: 'mysql',
   logging: false
 };
-
-if (esProduccion) {
+  if (esProduccion) {
   opciones.dialectOptions = {
     ssl: {
-      ca: process.env.DB_CA_CERT,
       rejectUnauthorized: true
     }
   };
