@@ -1,12 +1,14 @@
 # Sistema de Gestión de Turnos
 
-## Descripción
+## Descripción del proyecto
 
-Este proyecto consiste en el desarrollo de una API REST para administrar usuarios y turnos. Está realizado con Node.js y Express, y utiliza MySQL para guardar la información, con Sequelize para trabajar con la base de datos.
+El objetivo de este proyecto es desarrollar una API REST que permita gestionar usuarios y turnos de manera organizada. Para su desarrollo se utilizaron Node.js y Express, junto con MySQL y Sequelize para almacenar y administrar datos.
 
-La API permite realizar las operaciones principales de gestión: registrar información, consultar los datos existentes, modificarlos y eliminarlos.
+La API permite realizar distintas operaciones: registrar usuarios, consultar información, actualizar datos y gestionar turnos. El proyecto se encuentra publicado en Render y utiliza una base de datos MySQL alojada en Aiven.
 
-## Herramientas y tecnologías
+## Tecnologías utilizadas
+
+Para desarrollar la aplicación se utilizaron las siguientes herramientas y tecnologías:
 
 - Node.js
 - Express
@@ -19,63 +21,72 @@ La API permite realizar las operaciones principales de gestión: registrar infor
 - express-rate-limit
 - express-validator
 
-## Requisitos para ejecutar el proyecto
+## Enlaces
 
-Para utilizar la aplicación es necesario tener instalado Node.js, npm y MySQL.
+- **Repositorio de GitHub:** https://github.com/Solpacheco/sistema-turnos
+- **API desplegada en Render:** https://sistema-turnos-5ti6.onrender.com
 
-## Cómo iniciar el proyecto
+## Requisitos
+
+Para ejecutar el proyecto de manera local, es necesario tener Node.js, npm y una base de datos MySQL.
+
+## Instalación y ejecución
+
+Para poner en funcionamiento la aplicación, se deben seguir estos pasos:
 
 1. Descargar o clonar el repositorio.
-
-2. Abrir una terminal en la carpeta del proyecto.
-
-3. Instalar las dependencias con el comando:
+2. Abrir una terminal dentro de la carpeta del proyecto.
+3. Instalar las dependencias ejecutando el comando:
 
    `npm install`
 
-4. Crear un archivo `.env` en la carpeta principal y configurar los datos necesarios para la conexión con MySQL.
-
-5. Iniciar el servidor en modo desarrollo:
+4. Crear un archivo `.env` en la carpeta principal y configurar las variables necesarias para la conexión con la base de datos y la autenticación.
+5. Iniciar el servidor en modo desarrollo con:
 
    `npm run dev`
 
-   También se puede iniciar con `npm start`.
+   También se puede iniciar mediante el comando `npm start`.
 
-## Endpoints disponibles
+## Rutas de la API
 
-### Gestión de usuarios
+### Usuarios
 
-La API cuenta con las siguientes rutas para trabajar con usuarios:
+La API permite realizar las siguientes operaciones sobre los usuarios:
 
-- `GET /api/usuarios`: obtener todos los usuarios.
-- `GET /api/usuarios/:id`: buscar un usuario por su identificador.
-- `POST /api/usuarios`: registrar un usuario.
-- `PUT /api/usuarios/:id`: modificar los datos de un usuario.
-- `DELETE /api/usuarios/:id`: eliminar un usuario.
+- `GET /api/usuarios`: muestra el listado de usuarios.
+- `GET /api/usuarios/:id`: permite consultar un usuario por su ID.
+- `POST /api/usuarios`: registra un nuevo usuario.
+- `PUT /api/usuarios/:id`: actualiza los datos de un usuario.
+- `DELETE /api/usuarios/:id`: elimina un usuario.
 
-### Gestión de turnos
+### Turnos
 
-Las rutas destinadas a la administración de turnos son:
+Para administrar los turnos, se encuentran disponibles las siguientes rutas:
 
-- `GET /api/turnos`: consultar todos los turnos.
-- `GET /api/turnos/:id`: consultar un turno específico.
-- `POST /api/turnos`: crear un nuevo turno.
-- `PUT /api/turnos/:id`: actualizar los datos o el estado de un turno.
-- `DELETE /api/turnos/:id`: eliminar un turno.
+- `GET /api/turnos`: muestra todos los turnos registrados.
+- `GET /api/turnos/:id`: permite consultar un turno específico.
+- `POST /api/turnos`: registra un nuevo turno.
+- `PUT /api/turnos/:id`: permite modificar los datos o el estado de un turno.
+- `DELETE /api/turnos/:id`: elimina un turno.
 
-## Ejecución
+## Acceso a la aplicación
 
-Una vez iniciado el servidor, se puede acceder a la API desde:
+Cuando el servidor se ejecuta localmente, se puede acceder a la API desde:
 
 `http://localhost:3000`
 
-La ruta principal permite comprobar que el servicio se encuentra en funcionamiento.
+La ruta principal permite verificar que el servicio se encuentra activo.
+
+También se puede acceder a la versión publicada en Render mediante el siguiente enlace:
+
+https://sistema-turnos-5ti6.onrender.com
 
 ## Base de datos
 
-La aplicación utiliza una base de datos MySQL llamada `sistema_turnos`, en la que se almacena la información correspondiente a los usuarios y sus turnos.
+Para almacenar la información, el proyecto utiliza MySQL y Sequelize. La base de datos permite trabajar con dos entidades principales: usuarios y turnos.
 
+Durante el desarrollo local se puede utilizar una base de datos llamada `sistema_turnos`, mientras que en producción se utiliza MySQL alojado en Aiven.
 
-
+Los datos de conexión y las credenciales se configuran mediante variables de entorno, evitando incluir información sensible en el repositorio.
 
 
