@@ -27,6 +27,7 @@ const obtenerUsuario = async (req, res) => {
 
     res.json(usuario);
   } catch (error) {
+    console.error('Error al obtener usuario:', error);
     res.status(500).json({ mensaje: 'Error al obtener usuario' });
   }
 };
@@ -43,11 +44,11 @@ const crearUsuario = async (req, res) => {
 
     const formatoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-if (!formatoEmail.test(email)) {
-  return res.status(400).json({
-    mensaje: 'El formato del email no es válido'
-  });
-}
+    if (!formatoEmail.test(email)) {
+      return res.status(400).json({
+        mensaje: 'El formato del email no es válido'
+      });
+    }
 
     const existente = await Usuario.findOne({ where: { email } });
 
@@ -90,6 +91,14 @@ const actualizarUsuario = async (req, res) => {
     const { nombre, email, password } = req.body;
 
     if (email && email !== usuario.email) {
+      const formatoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+      if (!formatoEmail.test(email)) {
+        return res.status(400).json({
+          mensaje: 'El formato del email no es válido'
+        });
+      }
+
       const existente = await Usuario.findOne({ where: { email } });
 
       if (existente) {
@@ -146,4 +155,3 @@ module.exports = {
   actualizarUsuario,
   eliminarUsuario
 };
-
