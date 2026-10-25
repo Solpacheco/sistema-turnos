@@ -89,4 +89,33 @@ Durante el desarrollo local se puede utilizar una base de datos llamada `sistema
 
 Los datos de conexión y las credenciales se configuran mediante variables de entorno, evitando incluir información sensible en el repositorio.
 
+## Pruebas con Postman
+
+Se realizaron pruebas de las operaciones CRUD de usuarios y turnos: listar, buscar por ID, crear, actualizar y eliminar registros para comprobar el funcionamiento de la API
+
+También se verificó que la API responda correctamente cuando se busca un usuario o turno que no existe.
+
+La colección de Postman está incluida en el repositorio y nos permite ejecutar las solicitudes de prueba.
+
+**Archivo:** `Sistema de Gestión de Turnos.postman_collection.json`
+
+## Variables de entorno
+
+El proyecto utiliza un archivo `.env` para configurar la conexión con la base de datos y el puerto del servidor.
+
+Las variables necesarias son:
+
+- `DB_NAME`: nombre de la base de datos.
+- `DB_USER`: usuario de MySQL.
+- `DB_PASSWORD`: contraseña de MySQL.
+- `DB_HOST`: dirección del servidor de base de datos.
+- `DB_PORT`: puerto de MySQL.
+- `PORT`: puerto en el que se ejecuta la API.
+
+
+## Relación entre las entidades
+
+El sistema trabaja con dos entidades principales: usuarios y turnos. Un usuario puede tener varios turnos asociados, y cada turno corresponde a un usuario. Esta relación permite organizar y consultar los turnos registrados para cada usuario
+
+
 
