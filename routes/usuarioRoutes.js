@@ -8,10 +8,16 @@ const {
   crearUsuario,
   iniciarSesion,
   actualizarUsuario,
-  eliminarUsuario
+  eliminarUsuario,
+  obtenerPerfil
 } = require('../controllers/usuarioController');
 
+const verificarToken = require('../middlewares/authMiddleware');
+
 router.post('/login', iniciarSesion);
+router.post('/register', crearUsuario);
+
+router.get('/perfil', verificarToken, obtenerPerfil);
 
 router.get('/', listarUsuarios);
 router.get('/:id', obtenerUsuario);

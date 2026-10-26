@@ -8,7 +8,6 @@ const listarUsuarios = async (req, res) => {
     const usuarios = await Usuario.findAll({
       attributes: { exclude: ['password'] }
     });
-
     res.json(usuarios);
   } catch (error) {
     console.error('Error al listar usuarios:', error);
@@ -21,11 +20,9 @@ const obtenerUsuario = async (req, res) => {
     const usuario = await Usuario.findByPk(req.params.id, {
       attributes: { exclude: ['password'] }
     });
-
     if (!usuario) {
       return res.status(404).json({ mensaje: 'Usuario no encontrado' });
     }
-
     res.json(usuario);
   } catch (error) {
     console.error('Error al obtener usuario:', error);
@@ -42,6 +39,18 @@ const crearUsuario = async (req, res) => {
         mensaje: 'Nombre, email y contraseña son obligatorios'
       });
     }
+    if (
+      typeof nombre !== 'string' ||
+      typeof email !== 'string' ||
+      typeof password !== 'string' ||
+      !nombre.trim() ||
+      !email.trim() ||
+      !password
+    ) {
+      return res.status(400).json({
+        mensaje: 'Los datos enviados no son válidos'
+      });
+    }
 
     const emailNormalizado = email.trim().toLowerCase();
     const formatoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -55,7 +64,6 @@ const crearUsuario = async (req, res) => {
     const existente = await Usuario.findOne({
       where: { email: emailNormalizado }
     });
-
     if (existente) {
       return res.status(409).json({
         mensaje: 'Ya existe un usuario con ese email'
@@ -63,7 +71,6 @@ const crearUsuario = async (req, res) => {
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
-
     const usuario = await Usuario.create({
       nombre: nombre.trim(),
       email: emailNormalizado,
@@ -88,14 +95,18 @@ const iniciarSesion = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    if (!email || !password) {
+    if (
+      typeof email !== 'string' ||
+      typeof password !== 'string' ||
+      !email.trim() ||
+      !password
+    ) {
       return res.status(400).json({
         mensaje: 'Email y contraseña son obligatorios'
       });
     }
 
     const emailNormalizado = email.trim().toLowerCase();
-
     const usuario = await Usuario.findOne({
       where: { email: emailNormalizado }
     });
@@ -106,11 +117,7 @@ const iniciarSesion = async (req, res) => {
       });
     }
 
-    const passwordValida = await bcrypt.compare(
-      password,
-      usuario.password
-    );
-
+    const passwordValida = await bcrypt.compare(password, usuario.password);
     if (!passwordValida) {
       return res.status(401).json({
         mensaje: 'Email o contraseña incorrectos'
@@ -125,10 +132,7 @@ const iniciarSesion = async (req, res) => {
     }
 
     const token = jwt.sign(
-      {
-        id: usuario.id,
-        email: usuario.email
-      },
+      { id: usuario.id, email: usuario.email },
       process.env.JWT_SECRET,
       { expiresIn: '2h' }
     );
@@ -148,10 +152,26 @@ const iniciarSesion = async (req, res) => {
   }
 };
 
+const obtenerPerfil = async (req, res) => {
+  try {
+    const usuario = await Usuario.findByPk(req.usuario.id, {
+      attributes: { exclude: ['password'] }
+    });
+
+    if (!usuario) {
+      return res.status(404).json({ mensaje: 'Usuario no encontrado' });
+    }
+
+    return res.json(usuario);
+  } catch (error) {
+    console.error('Error al obtener perfil:', error);
+    return res.status(500).json({ mensaje: 'Error al obtener perfil' });
+  }
+};
+
 const actualizarUsuario = async (req, res) => {
   try {
     const usuario = await Usuario.findByPk(req.params.id);
-
     if (!usuario) {
       return res.status(404).json({ mensaje: 'Usuario no encontrado' });
     }
@@ -167,7 +187,6 @@ const actualizarUsuario = async (req, res) => {
 
       const emailNormalizado = email.trim().toLowerCase();
       const formatoEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
       if (!formatoEmail.test(emailNormalizado)) {
         return res.status(400).json({
           mensaje: 'El formato del email no es válido'
@@ -178,14 +197,12 @@ const actualizarUsuario = async (req, res) => {
         const existente = await Usuario.findOne({
           where: { email: emailNormalizado }
         });
-
         if (existente) {
           return res.status(409).json({
             mensaje: 'Ya existe un usuario con ese email'
           });
         }
       }
-
       usuario.email = emailNormalizado;
     }
 
@@ -195,16 +212,19 @@ const actualizarUsuario = async (req, res) => {
           mensaje: 'El nombre no puede estar vacío'
         });
       }
-
       usuario.nombre = nombre.trim();
     }
 
     if (password !== undefined && password !== '') {
+      if (typeof password !== 'string') {
+        return res.status(400).json({
+          mensaje: 'La contraseña no es válida'
+        });
+      }
       usuario.password = await bcrypt.hash(password, 10);
     }
 
     await usuario.save();
-
     return res.json({
       mensaje: 'Usuario actualizado correctamente',
       usuario: {
@@ -222,14 +242,12 @@ const actualizarUsuario = async (req, res) => {
 const eliminarUsuario = async (req, res) => {
   try {
     const usuario = await Usuario.findByPk(req.params.id);
-
     if (!usuario) {
       return res.status(404).json({ mensaje: 'Usuario no encontrado' });
     }
 
     await usuario.destroy();
-
-    res.json({ mensaje: 'Usuario eliminado correctamente' });
+    return res.json({ mensaje: 'Usuario eliminado correctamente' });
   } catch (error) {
     console.error('Error al eliminar usuario:', error);
     res.status(500).json({ mensaje: 'Error al eliminar usuario' });
@@ -241,6 +259,7 @@ module.exports = {
   obtenerUsuario,
   crearUsuario,
   iniciarSesion,
+  obtenerPerfil,
   actualizarUsuario,
   eliminarUsuario
 };
