@@ -186,7 +186,7 @@
       "response": []
     },
     {
-      "name": "Buscar usuario",
+      "name": "Buscar usuario por id inexistente",
       "request": {
         "method": "GET",
         "header": [],
@@ -237,6 +237,164 @@
         }
       },
       "response": []
+    },
+    {
+      "name": "Borrar usuario",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "https://sistema-turnos-5ti6.onrender.com/api/usuarios/3",
+          "protocol": "https",
+          "host": [
+            "sistema-turnos-5ti6",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "usuarios",
+            "3"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener perfil protegido",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{json_web_token_0fu6}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://sistema-turnos-5ti6.onrender.com/api/usuarios/perfil",
+          "protocol": "https",
+          "host": [
+            "sistema-turnos-5ti6",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "usuarios",
+            "perfil"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Probar ruta inexistente",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://sistema-turnos-5ti6.onrender.com/api/ruta-inventada",
+          "protocol": "https",
+          "host": [
+            "sistema-turnos-5ti6",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "ruta-inventada"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Ingresar",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"email\": \"login.nuevo@example.com\",\r\n  \"password\": \"PruebaLogin2026!\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://sistema-turnos-5ti6.onrender.com/api/usuarios/login",
+          "protocol": "https",
+          "host": [
+            "sistema-turnos-5ti6",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "usuarios",
+            "login"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Buscar usuario por ID",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://sistema-turnos-5ti6.onrender.com/api/usuarios/5",
+          "protocol": "https",
+          "host": [
+            "sistema-turnos-5ti6",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "usuarios",
+            "5"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Perfil sin token",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "https://sistema-turnos-5ti6.onrender.com/api/usuarios/perfil",
+          "protocol": "https",
+          "host": [
+            "sistema-turnos-5ti6",
+            "onrender",
+            "com"
+          ],
+          "path": [
+            "api",
+            "usuarios",
+            "perfil"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "json_web_token_0fu6",
+      "secret": true
     }
   ]
 }
+
+  
