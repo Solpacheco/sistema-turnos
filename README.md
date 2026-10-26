@@ -2,13 +2,18 @@
 
 ## Descripción del proyecto
 
-El objetivo de este proyecto es desarrollar una API REST que permita gestionar usuarios y turnos de manera organizada. Para su desarrollo se utilizaron Node.js y Express, junto con MySQL y Sequelize para almacenar y administrar datos.
+Este proyecto consiste en una API REST para gestionar usuarios y turnos. Permite registrar usuarios, iniciar sesión, consultar y actualizar información, y administrar turnos.
 
-La API permite realizar distintas operaciones: registrar usuarios, consultar información, actualizar datos y gestionar turnos. El proyecto se encuentra publicado en Render y utiliza una base de datos MySQL alojada en Aiven.
+La aplicación está desarrollada con Node.js y Express, utiliza MySQL para almacenar los datos y Sequelize para trabajar con la base de datos. También incluye autenticación mediante JWT y medidas de validación y seguridad.
+
+El proyecto está desplegado en Render y utiliza una base de datos MySQL alojada en Aiven.
+
+## Enlaces
+
+- **Repositorio de GitHub:** https://github.com/Solpacheco/sistema-turnos
+- **API desplegada en Render:** https://sistema-turnos-5ti6.onrender.com
 
 ## Tecnologías utilizadas
-
-Para desarrollar la aplicación se utilizaron las siguientes herramientas y tecnologías:
 
 - Node.js
 - Express
@@ -21,101 +26,144 @@ Para desarrollar la aplicación se utilizaron las siguientes herramientas y tecn
 - express-rate-limit
 - express-validator
 
-## Enlaces
-
-- **Repositorio de GitHub:** https://github.com/Solpacheco/sistema-turnos
-- **API desplegada en Render:** https://sistema-turnos-5ti6.onrender.com
-
 ## Requisitos
 
-Para ejecutar el proyecto de manera local, es necesario tener Node.js, npm y una base de datos MySQL.
+Para ejecutar el proyecto localmente, es necesario tener instalado Node.js, npm y disponer de una base de datos MySQL.
 
 ## Instalación y ejecución
 
-Para poner en funcionamiento la aplicación, se deben seguir estos pasos:
-
-1. Descargar o clonar el repositorio.
+1. Clonar o descargar el repositorio.
 2. Abrir una terminal dentro de la carpeta del proyecto.
-3. Instalar las dependencias ejecutando el comando:
+3. Instalar las dependencias:
 
-   `npm install`
+   ```bash
+   npm install
+   ```
 
-4. Crear un archivo `.env` en la carpeta principal y configurar las variables necesarias para la conexión con la base de datos y la autenticación.
-5. Iniciar el servidor en modo desarrollo con:
+4. Crear un archivo `.env` en la carpeta principal y configurar las variables de entorno necesarias.
+5. Iniciar el servidor en modo desarrollo:
 
-   `npm run dev`
+   ```bash
+   npm run dev
+   ```
 
-   También se puede iniciar mediante el comando `npm start`.
+   También se puede iniciar con:
+
+   ```bash
+   npm start
+   ```
+
+La API estará disponible localmente en `http://localhost:3000`.
 
 ## Rutas de la API
 
-### Usuarios
+Todas las rutas principales están organizadas bajo el prefijo `/api`.
 
-La API permite realizar las siguientes operaciones sobre los usuarios:
+### Usuarios y autenticación
 
-- `GET /api/usuarios`: muestra el listado de usuarios.
-- `GET /api/usuarios/:id`: permite consultar un usuario por su ID.
-- `POST /api/usuarios`: registra un nuevo usuario.
-- `PUT /api/usuarios/:id`: actualiza los datos de un usuario.
-- `DELETE /api/usuarios/:id`: elimina un usuario.
+| Método | Ruta | Descripción |
+|---|---|---|
+| POST | `/api/usuarios` | Registrar un usuario con contraseña protegida mediante bcrypt. |
+| POST | `/api/usuarios/login` | Iniciar sesión y obtener un token JWT. |
+| GET | `/api/usuarios` | Listar usuarios. |
+| GET | `/api/usuarios/:id` | Buscar un usuario por su ID. |
+| GET | `/api/usuarios/perfil` | Consultar el perfil del usuario autenticado. Requiere token. |
+| PUT | `/api/usuarios/:id` | Actualizar los datos de un usuario. |
+| DELETE | `/api/usuarios/:id` | Eliminar un usuario. |
 
 ### Turnos
 
-Para administrar los turnos, se encuentran disponibles las siguientes rutas:
+| Método | Ruta | Descripción |
+|---|---|---|
+| GET | `/api/turnos` | Listar turnos. |
+| GET | `/api/turnos/:id` | Buscar un turno por su ID. |
+| POST | `/api/turnos` | Registrar un turno. |
+| PUT | `/api/turnos/:id` | Actualizar los datos o el estado de un turno. |
+| DELETE | `/api/turnos/:id` | Eliminar un turno. |
 
-- `GET /api/turnos`: muestra todos los turnos registrados.
-- `GET /api/turnos/:id`: permite consultar un turno específico.
-- `POST /api/turnos`: registra un nuevo turno.
-- `PUT /api/turnos/:id`: permite modificar los datos o el estado de un turno.
-- `DELETE /api/turnos/:id`: elimina un turno.
+Los turnos incluyen una fecha, un motivo, un estado y la referencia al usuario asociado.
 
-## Acceso a la aplicación
+## Ejemplos de uso
 
-Cuando el servidor se ejecuta localmente, se puede acceder a la API desde:
+### Registrar un usuario
 
-`http://localhost:3000`
+Enviar una solicitud `POST` a `/api/usuarios` con un cuerpo JSON como el siguiente:
 
-La ruta principal permite verificar que el servicio se encuentra activo.
+```json
+{
+  "nombre": "Usuario de prueba",
+  "email": "usuario@example.com",
+  "password": "ClavePrueba123"
+}
+```
 
-También se puede acceder a la versión publicada en Render mediante el siguiente enlace:
+### Iniciar sesión
 
-https://sistema-turnos-5ti6.onrender.com
+Enviar una solicitud `POST` a `/api/usuarios/login`:
+
+```json
+{
+  "email": "usuario@example.com",
+  "password": "ClavePrueba123"
+}
+```
+
+Si las credenciales son correctas, la API devuelve un token JWT.
+
+### Consultar el perfil protegido
+
+Enviar una solicitud `GET` a `/api/usuarios/perfil` incluyendo el token obtenido al iniciar sesión en el encabezado:
+
+```text
+Authorization: Bearer TU_TOKEN_JWT
+```
+
+El texto `TU_TOKEN_JWT` debe reemplazarse por el token recibido. No se debe publicar ni compartir el token real.
+
+## Validaciones y seguridad
+
+- Las contraseñas se almacenan utilizando bcrypt.
+- La autenticación utiliza tokens JWT.
+- El perfil protegido requiere un token válido.
+- Se validan los datos recibidos y el formato del correo electrónico.
+- Se utiliza limitación de solicitudes mediante express-rate-limit.
+- Se manejan las rutas inexistentes y los errores de solicitudes con JSON mal formado.
+- Las credenciales y otros datos sensibles se configuran mediante variables de entorno.
 
 ## Base de datos
 
-Para almacenar la información, el proyecto utiliza MySQL y Sequelize. La base de datos permite trabajar con dos entidades principales: usuarios y turnos.
+El sistema utiliza MySQL y Sequelize para administrar dos entidades principales: usuarios y turnos.
 
-Durante el desarrollo local se puede utilizar una base de datos llamada `sistema_turnos`, mientras que en producción se utiliza MySQL alojado en Aiven.
+Un usuario puede tener varios turnos asociados y cada turno corresponde a un usuario.
 
-Los datos de conexión y las credenciales se configuran mediante variables de entorno, evitando incluir información sensible en el repositorio.
-
-## Pruebas con Postman
-
-Se realizaron pruebas de las operaciones CRUD de usuarios y turnos: listar, buscar por ID, crear, actualizar y eliminar registros para comprobar el funcionamiento de la API
-
-También se verificó que la API responda correctamente cuando se busca un usuario o turno que no existe.
-
-La colección de Postman está incluida en el repositorio y nos permite ejecutar las solicitudes de prueba.
-
-**Archivo:** `Sistema de Gestión de Turnos.postman_collection.json`
+En el entorno local se puede utilizar una base de datos llamada `sistema_turnos`. En producción se utiliza MySQL alojado en Aiven.
 
 ## Variables de entorno
 
-El proyecto utiliza un archivo `.env` para configurar la conexión con la base de datos y el puerto del servidor.
-
-Las variables necesarias son:
+Crear un archivo `.env` en la raíz del proyecto con las variables necesarias para la conexión a la base de datos y la autenticación:
 
 - `DB_NAME`: nombre de la base de datos.
 - `DB_USER`: usuario de MySQL.
 - `DB_PASSWORD`: contraseña de MySQL.
 - `DB_HOST`: dirección del servidor de base de datos.
 - `DB_PORT`: puerto de MySQL.
-- `PORT`: puerto en el que se ejecuta la API.
+- `PORT`: puerto de ejecución de la API.
+- `JWT_SECRET`: clave secreta utilizada para firmar y verificar los tokens JWT.
 
+No se publica el contenido del archivo `.env` ni se sube a GitHub. En producción, las variables se configuran desde el entorno de Render.
 
-## Relación entre las entidades
+## Pruebas con Postman
 
-El sistema trabaja con dos entidades principales: usuarios y turnos. Un usuario puede tener varios turnos asociados, y cada turno corresponde a un usuario. Esta relación permite organizar y consultar los turnos registrados para cada usuario
+Se realizaron pruebas de las operaciones de usuarios y turnos, incluyendo creación, consulta, actualización y eliminación.
 
+También se probaron el inicio de sesión, la generación del token JWT, el acceso al perfil protegido, las solicitudes sin token y las rutas inexistentes.
 
+La colección de Postman está incluida en el repositorio:
 
+`Sistema de Gestión de Turnos.postman_collection.json`
+
+Se puede importar en Postman para ejecutar las solicitudes de prueba contra la API desplegada.
+
+## Estado del proyecto
+
+La API se encuentra desplegada en Render y conectada a una base de datos MySQL alojada en Aiven. Se realizaron pruebas de las funcionalidades principales y de autenticación.
