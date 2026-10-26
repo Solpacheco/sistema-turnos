@@ -12,6 +12,7 @@ El proyecto está desplegado en Render y utiliza una base de datos MySQL alojada
 
 - **Repositorio de GitHub:** https://github.com/Solpacheco/sistema-turnos
 - **API desplegada en Render:** https://sistema-turnos-5ti6.onrender.com
+- - **Documentación y pruebas de la API (Postman):** [Abrir](https://github.com/Solpacheco/sistema-turnos/blob/main/Sistema%20de%20Gesti%C3%B3n%20de%20Turnos.postman_collection.json)
 
 ## Tecnologías utilizadas
 
