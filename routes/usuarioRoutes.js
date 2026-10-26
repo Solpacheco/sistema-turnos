@@ -6,9 +6,12 @@ const {
   listarUsuarios,
   obtenerUsuario,
   crearUsuario,
+  iniciarSesion,
   actualizarUsuario,
   eliminarUsuario
 } = require('../controllers/usuarioController');
+
+router.post('/login', iniciarSesion);
 
 router.get('/', listarUsuarios);
 router.get('/:id', obtenerUsuario);
