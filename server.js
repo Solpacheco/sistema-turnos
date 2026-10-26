@@ -24,12 +24,38 @@ app.use(rateLimit({
   legacyHeaders: false,
 }));
 
-app.use('/api/usuarios', usuarioRoutes);
-app.use('/api/turnos', turnoRoutes);
-
 app.get('/', (req, res) => {
   res.json({
     mensaje: 'API Sistema de Gestión de Turnos funcionando'
+  });
+});
+
+app.use('/api/usuarios', usuarioRoutes);
+app.use('/api/turnos', turnoRoutes);
+
+// Ruta para direcciones que no existen
+app.use((req, res) => {
+  res.status(404).json({
+    mensaje: 'La ruta solicitada no existe'
+  });
+});
+
+// Manejo de errores, incluido JSON mal formado
+app.use((error, req, res, next) => {
+  if (res.headersSent) {
+    return next(error);
+  }
+
+  if (error instanceof SyntaxError && error.status === 400 && 'body' in error) {
+    return res.status(400).json({
+      mensaje: 'El JSON enviado no es válido'
+    });
+  }
+
+  console.error('Error del servidor:', error.message);
+
+  return res.status(500).json({
+    mensaje: 'Error interno del servidor'
   });
 });
 
@@ -53,5 +79,3 @@ async function iniciarServidor() {
 }
 
 iniciarServidor();
-
-
