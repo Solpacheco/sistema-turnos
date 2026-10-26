@@ -1,7 +1,7 @@
 
-const jwt = require('jsonwebtoken');
+const { verificarToken } = require('../services/authService');
 
-const verificarToken = (req, res, next) => {
+const verificarAutenticacion = (req, res, next) => {
   const autorizacion = req.headers.authorization;
 
   if (!autorizacion || !autorizacion.startsWith('Bearer ')) {
@@ -13,7 +13,7 @@ const verificarToken = (req, res, next) => {
   const token = autorizacion.split(' ')[1];
 
   try {
-    const datos = jwt.verify(token, process.env.JWT_SECRET);
+    const datos = verificarToken(token);
     req.usuario = datos;
     next();
   } catch (error) {
@@ -23,4 +23,4 @@ const verificarToken = (req, res, next) => {
   }
 };
 
-module.exports = verificarToken;
+module.exports = verificarAutenticacion;
